@@ -80,9 +80,7 @@ res.df_combine6$prop.lci <- transf.ilogit(res.df_combine6$est - 1.96 * res.df_co
 res.df_combine6$prop.uci <- transf.ilogit(res.df_combine6$est + 1.96 * res.df_combine6$se)
 
  -----------------------------------------------------------
-# Monte Carlo simulation
-#' Monte Carlo simulation from logit-scale estimates
-#'
+# Monte Carlo simulation from logit-scale estimates
 #' @param logit_est Logit-scale point estimate
 #' @param logit_se Logit-scale standard error
 #' @param param_name Parameter name for labeling
@@ -122,11 +120,11 @@ logit_prop_mc <- function(logit_est, logit_se, param_name, n_sim = 1000, seed = 
  -----------------------------------------------------------
 # Define parameters for simulation
 # Estimates from meta-analysis models:
-# - mono_HIC: mono-infection proportion in HICs
-# - mono_LMICs: mono-infection proportion in LMICs/UMICs
-# - HICs: antibiotics use in HICs (mono-infection)
-# - UMICs: antibiotics use in UMICs (mono-infection)
-# - Global: global antibiotics use in mono-infection
+# mono_HIC: mono-infection proportion in HICs
+# mono_LMICs: mono-infection proportion in LMICs/UMICs
+# HICs: antibiotics use in HICs (mono-infection)
+# UMICs: antibiotics use in UMICs (mono-infection)
+# Global: global antibiotics use in mono-infection
 params_in <- list(
   logit_est = c(2.0945,      
                 0.1006,     
@@ -433,10 +431,10 @@ names(combined_hosp) <- c(
 --------------------------------------------------------------------------------------------------------------------------------------------
 ## 08-3 Estimate the impact of maternal RSV vaccination on reducing antibiotics use in infants aged 0–6 months using an indirect approach
 # Inputs:
-#   - combined_hosp: Hospital admission draws (HICs_pop_draw, LMICs_pop_draw, Global_pop_draw)
-#   - combined_mono: Mono-infection and antibiotic use draws (mono_HIC_rate, mono_LMICs_rate, HICs_use, LMICs_use)
-#   - combined_VE: Vaccine effectiveness draws (VE_inf)
-#   - vaccine_coverage: Vaccine coverage scenarios (default: 20%, 40%, 60%)
+# combined_hosp: Hospital admission draws (HICs_pop_draw, LMICs_pop_draw, Global_pop_draw)
+# combined_mono: Mono-infection and antibiotic use draws (mono_HIC_rate, mono_LMICs_rate, HICs_use, LMICs_use)
+# combined_VE: Vaccine effectiveness draws (VE_inf)
+# vaccine_coverage: Vaccine coverage scenarios (default: 20%, 40%, 60%)
 
 calculate_avoidable_antibiotics_indirect <- function(combined_hosp, combined_mono, combined_VE,
                                                      vaccine_coverage = c(0.2, 0.4, 0.6)) {
@@ -592,10 +590,10 @@ print(results_indirect$summary)
 ## 08-4 Estimate the impact of maternal RSV vaccination on reducing antibiotics use in infants aged 0–6 months using a direct approach
 
 # Inputs:
-#   - combined_hosp: Hospital admission draws (HICs_pop_draw, LMICs_pop_draw, Global_pop_draw)
-#   - combined_VE: Vaccine effectiveness draws (HICs_antiVE, LMICs_antiVE)
-#   - vaccine_coverage: Vaccine coverage scenarios (default: 20%, 40%, 60%)
-#   - adj_factor: Adjustment factor (default: 1.35)
+# combined_hosp: Hospital admission draws (HICs_pop_draw, LMICs_pop_draw, Global_pop_draw)
+# combined_VE: Vaccine effectiveness draws (HICs_antiVE, LMICs_antiVE)
+# vaccine_coverage: Vaccine coverage scenarios (default: 20%, 40%, 60%)
+# adj_factor: Adjustment factor (default: 1.35)
 
 calculate_avoidable_antibiotics_direct <- function(combined_hosp, combined_VE,
                                                    vaccine_coverage = c(0.2, 0.4, 0.6),
