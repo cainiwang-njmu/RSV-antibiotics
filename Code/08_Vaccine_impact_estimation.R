@@ -54,7 +54,8 @@ meta_region6 <- rma.glmm(
   measure = "PLO",
   data = hic_umic_dat,
   xi = Use,
-  ni = Case
+  ni = Case,
+  mods = ~ WHO_region - 1 # Stratified by region; remove for overall estimate
 )
 meta_region6$slab6 <- study_labels6
 summary(meta_region6)
@@ -136,7 +137,7 @@ params_in <- list(
                 2.6788,      
                 1.0867,     
                 1.0481),     
-  param_name = c("mono_HIC", "mono_LMICs", "HICs", "UMICs", "Global")
+  param_name = c("mono_HIC", "mono_LMICs", "HICs", "LMICs", "Global")
 )
 
 # Run Monte Carlo simulations
@@ -156,14 +157,14 @@ print(summary_prop)
 split_prop <- split(logit_draws_df, logit_draws_df$parameter)
 
 HICs_use    <- as.data.frame(split_prop$HICs)
-UMICs_use   <- as.data.frame(split_prop$UMICs)
+LMICs_use   <- as.data.frame(split_prop$LMICs)
 Global_use  <- as.data.frame(split_prop$Global)
 mono_HIC    <- as.data.frame(split_prop$mono_HIC)
 mono_LMICs  <- as.data.frame(split_prop$mono_LMICs)
 
 combined_mono <- cbind(
   HICs_use,
-  UMICs_use,
+  LMICs_use,
   Global_use,
   mono_HIC,
   mono_LMICs
@@ -171,7 +172,7 @@ combined_mono <- cbind(
 
 names(combined_mono) <- c(
   "HICs", "HICs_use", "draw_id1",
-  "UMICs", "UMICs_use", "draw_id2",
+  "LMICs", "LMICs_use", "draw_id2",
   "Global", "Global_use", "draw_id3",
   "mono_HIC", "mono_HIC_rate", "draw_id4",
   "mono_LMICs", "mono_LMICs_rate", "draw_id5"
