@@ -1,5 +1,6 @@
 # 08 Estimating the effect of vaccine intervention
 ## 08-1 Estimate mono-infection proportion and the prevalence of antibiotics use within mono-infection by WHO region
+set.seed(123)
 file_path <- "Data/data_analysis.xlsx"
 data_5 <- read_excel(file_path, sheet = "mono-infection")
 
@@ -84,12 +85,7 @@ res.df_combine6$prop.uci <- transf.ilogit(res.df_combine6$est + 1.96 * res.df_co
 # Monte Carlo simulation from logit-scale estimates
 #' @param logit_est Logit-scale point estimate
 #' @param logit_se Logit-scale standard error
-#' @param param_name Parameter name for labeling
-#' @param n_sim Number of simulations (default: 1000)
-#' @param seed Random seed for reproducibility
-#' @return List with summary and full simulation draws
-logit_prop_mc <- function(logit_est, logit_se, param_name, n_sim = 1000, seed = 123) {
-  set.seed(seed)
+logit_prop_mc <- function(logit_est, logit_se, param_name, n_sim = 1000) {
   
   logit_sim <- rnorm(n_sim, mean = logit_est, sd = logit_se)
   
@@ -141,7 +137,7 @@ params_in <- list(
 )
 
 # Run Monte Carlo simulations
-mc_prop <- pmap(params_in, logit_prop_mc, n_sim = 1000, seed = 123)
+mc_prop <- pmap(params_in, logit_prop_mc, n_sim = 1000)
 
 logit_draws_df <- map_dfr(mc_prop, function(x) {
   tibble(
@@ -186,8 +182,7 @@ names(combined_mono) <- c(
 #' @param vaccine_py Person-years in vaccine group
 #' @param placebo_cases Number of cases in placebo group
 #' @param placebo_py Person-years in placebo group
-#' @param alpha Significance level (default: 0.05 for 95% CI)
-#' @return List containing IRR, 95% CI, log IRR, and standard error
+
 irr_ci_simple <- function(vaccine_cases, vaccine_py, 
                           placebo_cases, placebo_py, 
                           alpha = 0.05) {
@@ -264,8 +259,7 @@ for (scen in scenarios) {
  -----------------------------------------------------------
 # Monte Carlo simulation for VE
 irr_log_normal_mc <- function(irr_point, irr_lower, irr_upper, 
-                              param_name, n_sim = 1000, seed = 123) {
-  set.seed(seed)
+                              param_name, n_sim = 1000) {
 
   mu <- log(irr_point)
   sigma <- (log(irr_upper) - log(irr_lower)) / (2 * 1.96)
@@ -323,7 +317,7 @@ params_in <- list(
 
 # Run Monte Carlo simulation
 
-mc_VE <- pmap(params_in, irr_log_normal_mc, seed = 123)
+mc_VE <- pmap(params_in, irr_log_normal_mc)
 
 irr_draws_df <- map_dfr(mc_VE, ~ .x$draws_df)
 summary_VE <- map_dfr(mc_VE, ~ .x$summary)
@@ -354,8 +348,7 @@ names(combined_VE) <- c(
 #08-2 Hospital admission estimates for infants aged 0-6 months
 # Monte Carlo simulation for hospital admissions (0-6 months) 
 
-rsv_hospital_mc <- function(scenarios, R = 1000, seed = 123) {
-  set.seed(seed)
+rsv_hospital_mc <- function(scenarios, R = 1000) {
   
   results_list <- list()
   full_simulations <- list()
