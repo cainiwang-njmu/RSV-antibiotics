@@ -318,7 +318,7 @@ params_in <- list(
   irr_point = c(0.865, 0.505, 0.879, 0.485, 0.556),
   irr_lower = c(0.751, 0.293, 0.759, 0.353, 0.383),
   irr_upper = c(0.995, 0.870, 1.017, 0.666, 0.808),
-  param_name = c("Global_antiVE", "HICs_antiVE", "LMICs_antiVE", "VE", "VE_fnano")
+  param_name = c("Global_IRR", "HICs_IRR", "LMICs_IRR", "VE_IRR", "VE_fnano_IRR")
 )
 
 # Run Monte Carlo simulation
@@ -335,13 +335,13 @@ split_VE <- split(irr_draws_df, irr_draws_df$parameter)
 table(irr_draws_df$parameter)
 
 # Extract individual parameter draws
-Global_antiVE <- as.data.frame(split_VE$Global_antiVE)
-HICs_antiVE <- as.data.frame(split_VE$HICs_antiVE)
-LMICs_antiVE <- as.data.frame(split_VE$LMICs_antiVE)
-VE <- as.data.frame(split_VE$VE)
+Global_IRR <- as.data.frame(split_VE$Global_IRR)
+HICs_IRR <- as.data.frame(split_VE$HICs_IRR)
+LMICs_IRR <- as.data.frame(split_VE$LMICs_IRR)
+VE_IRR <- as.data.frame(split_VE$VE_IRR)
 
 # Combine into a single data frame 
-combined_VE <- cbind(HICs_antiVE, LMICs_antiVE, Global_antiVE, VE)
+combined_VE <- cbind(HICs_IRR, LMICs_IRR, Global_IRR, VE_IRR)
 names(combined_VE) <- c(
   "HICs", "HICs_IRR", "HICs_antiVE", "draw_id1",
   "LMICs", "LMICs_IRR", "LMICs_antiVE", "draw_id2",
