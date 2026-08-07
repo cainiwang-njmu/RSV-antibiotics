@@ -1,6 +1,7 @@
 # 07 Estimates of antibiotics use in children younger than 5 years hospitalised with RSV-associated acute lower respiratory infection by World Bank income regions
 ## 07-1 Predict the prevalence of antibiotics use based on meta-regression model
 ### Predict logit-scale effects for all scenarios
+
 predict_effects_logit <- function(model, data) {
   
   study_levels <- levels(data$Study_duration)
@@ -119,7 +120,6 @@ monte_carlo_from_predict <- function(pred_obj, n_sim = 1000) {
 }
 
 ### Run prediction and simulation
-set.seed(123)
 pred_logit <- predict_effects_logit(glmm_model, reg_data)
 mc_results <- monte_carlo_from_predict(pred_logit, n_sim = 1000)
 rate_predict <- mc_results$raw_draws
@@ -137,8 +137,7 @@ hospital_data <- read_excel(
 )
 
 ### Monte Carlo simulation for population effects
-pop_effects_mc <- function(pop_data, R = 1000, seed = 123) {
-  set.seed(seed)
+pop_effects_mc <- function(pop_data, R = 1000) {
   pop_data <- pop_data %>%
     mutate(
       income_group = income_level,
